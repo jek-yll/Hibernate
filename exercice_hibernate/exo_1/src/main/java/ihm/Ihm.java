@@ -5,6 +5,7 @@ import model.Product;
 import service.ProductService;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
 
 public class Ihm {
@@ -19,7 +20,8 @@ public class Ihm {
             System.out.println("2. Modifier un produit");
             System.out.println("3. Supprimer un produit");
             System.out.println("4. Afficher un produit");
-            System.out.println("5. Quitter");
+            System.out.println("5. Afficher tous les produits");
+            System.out.println("6. Quitter");
             System.out.print("Choix : ");
 
             int choice = sc.nextInt();
@@ -39,6 +41,9 @@ public class Ihm {
                     findProduct();
                     break;
                 case 5:
+                    getAllProduct();
+                    break;
+                case 6:
                     running = false;
                     ProductDao.close();
                     break;
@@ -136,6 +141,19 @@ public class Ihm {
             System.out.println("Echec lors de la recherche du produit");
         }
 
+    }
+
+    private static void getAllProduct(){
+        System.out.println("#### LISTES DES PRODUITS ####");
+        List<Product> products = productService.getAllProduct();
+
+        if (products.isEmpty()){
+            System.out.println("Aucun produit à afficher");
+        } else {
+            for (Product p: products) {
+                System.out.println(p);
+            }
+        }
     }
 
 }
