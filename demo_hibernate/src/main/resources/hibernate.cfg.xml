@@ -11,9 +11,16 @@
         <mapping class="heritage.joined_table.CreditCardPayment"/>
         <mapping class="heritage.joined_table.Payment"/>
         <mapping class="heritage.joined_table.PayPalPayment"/>
+
         <mapping class="heritage.single_table.CreditCardPayment1"/>
         <mapping class="heritage.single_table.PayPalPayment1"/>
         <mapping class="heritage.single_table.Payment1"/>
+
+        <mapping class="heritage.table_per_class.CreditCardPayment2"/>
+        <mapping class="heritage.table_per_class.PayPalPayment2"/>
+        <mapping class="heritage.table_per_class.Payment2"/>
+
+        <mapping class="demo.model.Personne"/>
 
     </session-factory>
 
