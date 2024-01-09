@@ -5,6 +5,8 @@ import model.Product;
 import service.ProductService;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,7 +23,13 @@ public class Ihm {
             System.out.println("3. Supprimer un produit");
             System.out.println("4. Afficher un produit");
             System.out.println("5. Afficher tous les produits");
-            System.out.println("6. Quitter");
+            System.out.println("6. Filtre : prix minimum");
+            System.out.println("7. Filtre : date");
+            System.out.println("8. Filtre : stock");
+            System.out.println("9. Filtre : marque");
+            System.out.println("10. Listes des produits d'une marque");
+            System.out.println("0. Quitter");
+
             System.out.print("Choix : ");
 
             int choice = sc.nextInt();
@@ -44,6 +52,20 @@ public class Ihm {
                     getAllProduct();
                     break;
                 case 6:
+                    filterByPriceMin();
+                    break;
+                case 7:
+                    filterByDate();
+                    break;
+                case 8:
+                    filterByStock();
+                    break;
+                case 9:
+                    filterByBrand();
+                    break;
+                case 10:
+                    stockByBrand();
+                case 0:
                     running = false;
                     ProductDao.close();
                     break;
@@ -63,11 +85,13 @@ public class Ihm {
         System.out.println("Saisir le prix : ");
         Double price = sc.nextDouble();
         sc.nextLine();
-        LocalDate date = LocalDate.now();
+        System.out.println("Saisir la date d'achat (jj-mm-aaa): ");
+        String date = sc.nextLine();
+        LocalDate dateFormat = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         System.out.println("Saisir le stock initial : ");
         Integer stock = sc.nextInt();
 
-        if (productService.addProduct(brand, ref, date, price, stock)){
+        if (productService.addProduct(brand, ref, dateFormat, price, stock)){
             System.out.println("Produit " + ref + "ajouté avec succès");
         } else {
             System.out.println("Echec lors de l'ajout du produit");
@@ -121,8 +145,10 @@ public class Ihm {
             System.out.println("Saisir le prix : ");
             Double price = sc.nextDouble();
             sc.nextLine();
-            //TODO Demander une date STRING convertir en LOCALDATE
-            LocalDate date = LocalDate.now();
+            System.out.println("Saisir la date d'achat (jj-mm-aaa): ");
+            String date = sc.nextLine();
+            LocalDate dateFormat = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
             System.out.println("Saisir le stock initial : ");
             Integer stock = sc.nextInt();
 
@@ -130,7 +156,7 @@ public class Ihm {
             product.setBrand(brand);
             product.setPrice(price);
             product.setStock(stock);
-            product.setPurchaseDate(date);
+            product.setPurchaseDate(dateFormat);
 
             if (productService.updateProduct(product)){
                 System.out.println("Produit modifié avec succès");
@@ -154,6 +180,79 @@ public class Ihm {
                 System.out.println(p);
             }
         }
+    }
+
+    private static void filterByPriceMin(){
+        System.out.println("#### FILTRE : PRIX MIN ####");
+        List<Product> productsFiltered = new ArrayList<>();
+        System.out.println("Saisir un prix : ");
+        Double price = sc.nextDouble();
+        sc.nextLine();
+
+        productsFiltered = productService.productsWithPriceMin(price);
+
+        if (productsFiltered.isEmpty()){
+            System.out.println("Aucun produit à plus de "+ price);
+        } else {
+            for (Product p : productsFiltered){
+                System.out.println(p);
+            }
+        }
+    }
+
+    // TODO
+    private static void filterByDate(){
+        System.out.println("#### FILTRE : DATE ####");
+        System.out.println("Recherche des produits acheté entre le (jj-mm-aaa) :");
+        String date1 = sc.nextLine();
+        System.out.println("Et le (jj-mm-aaa): ");
+        String date2 = sc.nextLine();
+
+        LocalDate date1Format = LocalDate.parse(date1, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate date2Format = LocalDate.parse(date2, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
+        List<Product> products = productService.productsBuyBetween(date2Format, date1Format);
+        for (Product p : products) {
+            System.out.println(p);
+        }
+    }
+
+    private static void filterByStock(){
+        System.out.println("#### FILTRE : STOCK ####");
+        System.out.println("Recherche des produits ayant un stock inférieur à : ");
+        Integer stock = sc.nextInt();
+        sc.nextLine();
+
+        List<Product> products = productService.filterByStock(stock);
+
+        if (products.isEmpty()){
+            System.out.println("Aucun produit à afficher");
+        } else {
+            for (Product p : products){
+                System.out.println("Produit : " + p.getBrand() + " " + p.getReference());
+            }
+        }
+    }
+
+    private static void filterByBrand(){
+        System.out.println("#### FILTRE : MARQUE");
+        System.out.println("Recherche des produits de la marque : ");
+        String brand = sc.nextLine();
+
+        List<Product> products = productService.filterByBrand(brand);
+
+        if (products.isEmpty()){
+            System.out.println("Aucun produit à afficher");
+        } else {
+            for (Product p : products){
+                System.out.println("Produit : " + p);
+            }
+        }
+    }
+
+    private static void stockByBrand(){
+        System.out.println("#### STOCK PAR MARQUE ####");
+        System.out.println("Recherche du stock total de la marque : ");
     }
 
 }

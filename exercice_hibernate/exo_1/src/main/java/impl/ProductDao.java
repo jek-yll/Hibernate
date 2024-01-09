@@ -10,6 +10,7 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.query.Query;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,6 +147,104 @@ public class ProductDao  implements BaseDAO<Product> {
         }
 
         return products;
+    }
+
+    public List<Product> productsWithPriceMin(Double price){
+        List<Product> products = new ArrayList<>();
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+
+        try {
+            transaction = session.getTransaction();
+            transaction.begin();
+
+            Query<Product> productQuery = session.createQuery("from Product where price >= :price");
+            productQuery.setParameter("price", price);
+            products = productQuery.list();
+
+        } catch (Exception e){
+            if (transaction != null){
+                transaction.rollback();
+                e.printStackTrace();
+            }
+        }
+        return products;
+    }
+
+    public List<Product> productsFilterByDate(LocalDate date1, LocalDate date2){
+        List<Product> products = new ArrayList<>();
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+
+        try {
+            transaction = session.getTransaction();
+            transaction.begin();
+
+            Query<Product> productQuery = session.createQuery("from Product where purchaseDate between :min and :max");
+            productQuery.setParameter("min", date1);
+            productQuery.setParameter("max", date2);
+            products = productQuery.list();
+
+        } catch (Exception e){
+            if (transaction != null){
+                transaction.rollback();
+                e.printStackTrace();
+            }
+        }
+        return products;
+    }
+
+    public List<Product> filterByStockMin(Integer stock){
+        List<Product> products = new ArrayList<>();
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+
+        try {
+            transaction = session.getTransaction();
+            transaction.begin();
+
+            Query<Product> productQuery = session.createQuery("from Product where stock >= :stock");
+            productQuery.setParameter("stock", stock);
+            products = productQuery.list();
+
+        } catch (Exception e){
+            if (transaction != null){
+                transaction.rollback();
+                e.printStackTrace();
+            }
+        }
+        return products;
+    }
+
+    public List<Product> filterByBrand(String brand){
+        List<Product> products = new ArrayList<>();
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+
+        try {
+            transaction = session.getTransaction();
+            transaction.begin();
+
+            Query<Product> productQuery = session.createQuery("from Product where brand = :brand");
+            productQuery.setParameter("brand", brand);
+            products = productQuery.list();
+
+        } catch (Exception e){
+            if (transaction != null){
+                transaction.rollback();
+                e.printStackTrace();
+            }
+        }
+        return products;
+    }
+
+    public Integer getTotalStockByBrand(String brand){
+        List <Product> products = filterByBrand(brand);
+
+        for (Product p : products){
+
+        }
+
     }
 
 

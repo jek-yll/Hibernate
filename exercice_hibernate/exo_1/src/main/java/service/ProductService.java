@@ -31,4 +31,44 @@ public class ProductService {
     public List<Product> getAllProduct(){
         return productDao.getALL();
     }
+
+    public List<Product> productsWithPriceMin (Double price){
+        return productDao.productsWithPriceMin(price);
+    }
+
+    public List<Product> productsBuyBetween (LocalDate date1, LocalDate date2){
+
+        List <Product> products = productDao.productsFilterByDate(date1, date2);
+
+        if (date2.isBefore(date1)){
+            if (products.isEmpty()){
+                System.out.println("Aucun produit a afficher");
+            }
+        } else {
+            System.out.println("Saisi des dates incorrect");
+        }
+        return products;
+    }
+
+    public List<Product> filterByStock(Integer stock) {
+
+        List<Product>products = productDao.filterByStockMin(stock);
+
+        if (products.isEmpty()){
+            System.out.println("Aucun produit a afficher");
+        }
+
+        return products;
+    }
+
+    public List<Product> filterByBrand(String brand) {
+
+        List<Product>products = productDao.filterByBrand(brand);
+
+        if (products.isEmpty()){
+            System.out.println("Aucun produit a afficher");
+        }
+
+        return products;
+    }
 }
