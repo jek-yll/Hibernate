@@ -71,4 +71,14 @@ public class ProductService {
 
         return products;
     }
+    public boolean deleteByBrand(String brand){
+        return productDao.deleteByBrand(brand);
+    }
+    public Long getSockByBrand(String brand){
+        return productDao.getTotalStockByBrand(brand);
+    }
+
+    public Double getAvgPrice(){
+        return productDao.getAvgPrice();
+    }
 }

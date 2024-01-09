@@ -27,7 +27,9 @@ public class Ihm {
             System.out.println("7. Filtre : date");
             System.out.println("8. Filtre : stock");
             System.out.println("9. Filtre : marque");
-            System.out.println("10. Listes des produits d'une marque");
+            System.out.println("10. Stock total des produits d'une marque");
+            System.out.println("11. Supprimer les produits d'une marque");
+            System.out.println("12. Calcul du prix moyen des produits");
             System.out.println("0. Quitter");
 
             System.out.print("Choix : ");
@@ -65,6 +67,13 @@ public class Ihm {
                     break;
                 case 10:
                     stockByBrand();
+                    break;
+                case  11:
+                    deleteByBrand();
+                    break;
+                case 12:
+                    getAvgPrice();
+                    break;
                 case 0:
                     running = false;
                     ProductDao.close();
@@ -235,7 +244,7 @@ public class Ihm {
     }
 
     private static void filterByBrand(){
-        System.out.println("#### FILTRE : MARQUE");
+        System.out.println("#### FILTRE : MARQUE ####");
         System.out.println("Recherche des produits de la marque : ");
         String brand = sc.nextLine();
 
@@ -253,6 +262,26 @@ public class Ihm {
     private static void stockByBrand(){
         System.out.println("#### STOCK PAR MARQUE ####");
         System.out.println("Recherche du stock total de la marque : ");
+        String brand = sc.nextLine();
+
+        System.out.println(productService.getSockByBrand(brand));
+    }
+
+    private static void deleteByBrand(){
+        System.out.println("#### SUPPRESSION PAR MARQUE ####");
+        System.out.println("Quelle marque souhaitez vous retirer : ");
+        String brand = sc.nextLine();
+
+        if (productService.deleteByBrand(brand)) {
+            System.out.println("Suppression des produits de la marque " + brand + " effectué avec succes ");
+        } else {
+            System.out.println("Echec lors de la suppression des produits");
+        }
+    }
+
+    private static void getAvgPrice(){
+        System.out.println("#### MOYENNE DE PRIX DES PRODUITS ####");
+        System.out.println(productService.getAvgPrice());
     }
 
 }

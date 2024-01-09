@@ -167,6 +167,8 @@ public class ProductDao  implements BaseDAO<Product> {
                 transaction.rollback();
                 e.printStackTrace();
             }
+        } finally {
+            session.close();
         }
         return products;
     }
@@ -190,6 +192,8 @@ public class ProductDao  implements BaseDAO<Product> {
                 transaction.rollback();
                 e.printStackTrace();
             }
+        } finally {
+            session.close();
         }
         return products;
     }
@@ -212,6 +216,8 @@ public class ProductDao  implements BaseDAO<Product> {
                 transaction.rollback();
                 e.printStackTrace();
             }
+        } finally {
+            session.close();
         }
         return products;
     }
@@ -234,19 +240,89 @@ public class ProductDao  implements BaseDAO<Product> {
                 transaction.rollback();
                 e.printStackTrace();
             }
+        } finally {
+            session.close();
         }
         return products;
     }
 
-    public Integer getTotalStockByBrand(String brand){
-        List <Product> products = filterByBrand(brand);
+    public Long getTotalStockByBrand(String brand){
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
 
-        for (Product p : products){
+        try {
+            transaction = session.getTransaction();
+            transaction.begin();
 
+            Query<Long> productQuery = session.createQuery("select sum(stock) from Product where brand = :brand");
+            productQuery.setParameter("brand", brand );
+            Long sum = productQuery.uniqueResult();
+
+            transaction.commit();
+
+            return sum;
+        } catch (Exception e){
+            if (transaction != null){
+                transaction.rollback();
+                e.printStackTrace();
+            }
+        } finally {
+            session.close();
         }
-
+        return null;
     }
 
+    public boolean deleteByBrand(String brand){
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+
+        try {
+            transaction = session.getTransaction();
+            transaction.begin();
+
+            String deleteByBrandQuerry = "delete Product where brand = :brand";
+            Query delete = session.createQuery(deleteByBrandQuerry);
+            delete.setParameter("brand", brand);
+            int succes = delete.executeUpdate();
+
+            transaction.commit();
+
+            return true;
+        } catch (Exception e){
+            if (transaction != null){
+                transaction.rollback();
+                e.printStackTrace();
+            }
+        } finally {
+            session.close();
+        }
+        return false;
+    }
+
+    public Double getAvgPrice(){
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+
+        try {
+            transaction = session.getTransaction();
+            transaction.begin();
+
+            Query<Double> productQuery = session.createQuery("select avg(price) from Product ");
+            Double avg = productQuery.uniqueResult();
+
+            transaction.commit();
+
+            return avg;
+        } catch (Exception e){
+            if (transaction != null){
+                transaction.rollback();
+                e.printStackTrace();
+            }
+        } finally {
+            session.close();
+        }
+        return null;
+    }
 
     public static void close(){
         sessionFactory.close();
