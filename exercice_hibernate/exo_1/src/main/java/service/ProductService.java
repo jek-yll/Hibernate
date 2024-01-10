@@ -18,12 +18,15 @@ public class ProductService {
         Product product = new Product( brand, reference, purchaseDate, price, stock );
         return productDao.create(product);
     }
+
     public boolean removeProduct(Long id){
         return productDao.delete(id);
     }
+
     public Product findProductById(Long id){
         return productDao.getById(id);
     }
+
     public boolean updateProduct(Product p){
         return productDao.update(p);
     }
@@ -71,9 +74,11 @@ public class ProductService {
 
         return products;
     }
+
     public boolean deleteByBrand(String brand){
         return productDao.deleteByBrand(brand);
     }
+
     public Long getSockByBrand(String brand){
         return productDao.getTotalStockByBrand(brand);
     }
