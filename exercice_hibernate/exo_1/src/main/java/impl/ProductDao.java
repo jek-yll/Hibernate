@@ -16,12 +16,12 @@ import java.util.List;
 
 public class ProductDao  implements BaseDAO<Product> {
 
-    private static StandardServiceRegistry registry  = new StandardServiceRegistryBuilder().configure().build();
+    private static final StandardServiceRegistry registry  = new StandardServiceRegistryBuilder().configure().build();
     private static SessionFactory sessionFactory;
 
     public ProductDao(){
         sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-    };
+    }
 
     @Override
     public boolean create(Product product) {
