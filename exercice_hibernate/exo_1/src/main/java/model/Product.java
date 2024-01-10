@@ -79,13 +79,12 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" +
-                "id=" + id +
-                ", brand='" + brand + '\'' +
-                ", reference='" + reference + '\'' +
-                ", purchaseDate=" + purchaseDate +
-                ", price=" + price +
-                ", stock=" + stock +
-                '}';
+        return "Produit => " +
+                "identifiant : " + id +
+                ", marque : '" + brand + '\'' +
+                ", référence : '" + reference + '\'' +
+                ", date d'achat : " + purchaseDate +
+                ", prix : " + price +
+                ", stock : " + stock ;
     }
 }

@@ -36,11 +36,11 @@ public class ProductService {
         return productDao.productsWithPriceMin(price);
     }
 
-    public List<Product> productsBuyBetween (LocalDate date1, LocalDate date2){
+    public List<Product> productsBuyBetween (LocalDate dateMin, LocalDate dateMax){
 
-        List <Product> products = productDao.productsFilterByDate(date1, date2);
+        List <Product> products = productDao.productsFilterByDate(dateMin, dateMax);
 
-        if (date2.isBefore(date1)){
+        if (dateMin.isBefore(dateMax)){
             if (products.isEmpty()){
                 System.out.println("Aucun produit a afficher");
             }

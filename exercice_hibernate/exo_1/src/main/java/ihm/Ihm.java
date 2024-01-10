@@ -101,7 +101,7 @@ public class Ihm {
         Integer stock = sc.nextInt();
 
         if (productService.addProduct(brand, ref, dateFormat, price, stock)){
-            System.out.println("Produit " + ref + "ajouté avec succès");
+            System.out.println("Produit " + ref + " ajouté avec succès");
         } else {
             System.out.println("Echec lors de l'ajout du produit");
         };
@@ -209,18 +209,17 @@ public class Ihm {
         }
     }
 
-    // TODO
     private static void filterByDate(){
         System.out.println("#### FILTRE : DATE ####");
         System.out.println("Recherche des produits acheté entre le (jj-mm-aaa) :");
-        String date1 = sc.nextLine();
+        String dateMin = sc.nextLine();
         System.out.println("Et le (jj-mm-aaa): ");
-        String date2 = sc.nextLine();
+        String dateMax = sc.nextLine();
 
-        LocalDate date1Format = LocalDate.parse(date1, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-        LocalDate date2Format = LocalDate.parse(date2, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate dateMinFormat = LocalDate.parse(dateMin, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate dateMaxFormat = LocalDate.parse(dateMax, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
-        List<Product> products = productService.productsBuyBetween(date2Format, date1Format);
+        List<Product> products = productService.productsBuyBetween(dateMinFormat, dateMaxFormat);
         for (Product p : products) {
             System.out.println(p);
         }
@@ -264,7 +263,7 @@ public class Ihm {
         System.out.println("Recherche du stock total de la marque : ");
         String brand = sc.nextLine();
 
-        System.out.println(productService.getSockByBrand(brand));
+        System.out.println("Stock total des produits de la marque " + brand + " : " + productService.getSockByBrand(brand));
     }
 
     private static void deleteByBrand(){

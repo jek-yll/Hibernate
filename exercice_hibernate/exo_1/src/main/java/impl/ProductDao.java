@@ -173,7 +173,7 @@ public class ProductDao  implements BaseDAO<Product> {
         return products;
     }
 
-    public List<Product> productsFilterByDate(LocalDate date1, LocalDate date2){
+    public List<Product> productsFilterByDate(LocalDate dateMin, LocalDate dateMax){
         List<Product> products = new ArrayList<>();
         Session session = sessionFactory.openSession();
         Transaction transaction = null;
@@ -182,9 +182,9 @@ public class ProductDao  implements BaseDAO<Product> {
             transaction = session.getTransaction();
             transaction.begin();
 
-            Query<Product> productQuery = session.createQuery("from Product where purchaseDate between :min and :max");
-            productQuery.setParameter("min", date1);
-            productQuery.setParameter("max", date2);
+            Query<Product> productQuery = session.createQuery("from Product where purchaseDate >= :min and purchaseDate <= :max");
+            productQuery.setParameter("min", dateMin);
+            productQuery.setParameter("max", dateMax);
             products = productQuery.list();
 
         } catch (Exception e){
@@ -207,7 +207,7 @@ public class ProductDao  implements BaseDAO<Product> {
             transaction = session.getTransaction();
             transaction.begin();
 
-            Query<Product> productQuery = session.createQuery("from Product where stock >= :stock");
+            Query<Product> productQuery = session.createQuery("from Product where stock <= :stock");
             productQuery.setParameter("stock", stock);
             products = productQuery.list();
 
