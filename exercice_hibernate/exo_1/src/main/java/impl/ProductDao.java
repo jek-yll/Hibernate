@@ -1,6 +1,7 @@
 package impl;
 
 import dao.BaseDAO;
+import model.Image;
 import model.Product;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -322,6 +323,31 @@ public class ProductDao  implements BaseDAO<Product> {
             session.close();
         }
         return null;
+    }
+
+    public Boolean addImageToProduct(Image image, Product product){
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+
+        try {
+            transaction = session.getTransaction();
+            transaction.begin();
+
+            product.getImages().add(image);
+            session.merge(product);
+            session.getTransaction().commit();
+
+            return true;
+        } catch (Exception e){
+            if (transaction != null){
+                transaction.rollback();
+                e.printStackTrace();
+            }
+        } finally {
+            session.close();
+        }
+
+        return false;
     }
 
     public static void close(){

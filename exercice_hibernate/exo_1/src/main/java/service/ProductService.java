@@ -1,6 +1,7 @@
 package service;
 
 import impl.ProductDao;
+import model.Image;
 import model.Product;
 
 import java.time.LocalDate;
@@ -85,5 +86,13 @@ public class ProductService {
 
     public Double getAvgPrice(){
         return productDao.getAvgPrice();
+    }
+
+    public Boolean addImageToProduct(Product product, String url) {
+
+        Image image = new Image();
+        image.setUrl(url);
+
+        return productDao.addImageToProduct(image, product);
     }
 }

@@ -30,6 +30,7 @@ public class Ihm {
             System.out.println("10. Stock total des produits d'une marque");
             System.out.println("11. Supprimer les produits d'une marque");
             System.out.println("12. Calcul du prix moyen des produits");
+            System.out.println("13. Ajouter une image");
             System.out.println("0. Quitter");
 
             System.out.print("Choix : ");
@@ -73,6 +74,9 @@ public class Ihm {
                     break;
                 case 12:
                     getAvgPrice();
+                    break;
+                case 13:
+                    addImage();
                     break;
                 case 0:
                     running = false;
@@ -281,6 +285,27 @@ public class Ihm {
     private static void getAvgPrice(){
         System.out.println("#### MOYENNE DE PRIX DES PRODUITS ####");
         System.out.println(productService.getAvgPrice());
+    }
+
+    private static void addImage(){
+        System.out.println("#### AJOUTER UNE IMAGE ####");
+        System.out.println("Saisir l'URL de l'image : ");
+        String url = sc.nextLine();
+        System.out.println("Saisir l'identifiant du produit : ");
+        Long id = sc.nextLong();
+        sc.nextLine();
+
+        Product product = productService.findProductById(id);
+
+        if (product == null){
+            System.out.println("Le produit recherché n'existe pas");
+        } else {
+            if (productService.addImageToProduct(product, url)){
+                System.out.println("Image ajouté au produit " + id);
+            } else {
+                System.out.println("Erreur lors de l'ajout d'une image");
+            };
+        }
     }
 
 }

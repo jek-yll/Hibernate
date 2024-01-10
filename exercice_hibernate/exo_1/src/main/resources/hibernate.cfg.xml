@@ -9,6 +9,10 @@
     <session-factory>
 
         <mapping class="model.Product"/>
+        <mapping class="model.Image" />
+        <mapping class="model.Order"/>
+        <mapping class="model.Address"/>
+        <mapping class="model.Comment"/>
 
     </session-factory>
 
