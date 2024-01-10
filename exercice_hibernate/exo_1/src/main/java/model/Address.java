@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "address")
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +16,6 @@ public class Address {
     private Order order;
 
     public Address() {
-
     }
 
     public Address(String street, String city, String zipCode) {

@@ -12,7 +12,7 @@ public class Image {
 
     private String url;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Product product;
 
     public Image() {
@@ -39,5 +39,11 @@ public class Image {
         this.url = url;
     }
 
+    public Product getProduct() {
+        return product;
+    }
 
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 }

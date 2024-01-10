@@ -3,6 +3,7 @@ package model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,23 +18,27 @@ public class Product {
     private LocalDate purchaseDate;
     private Double price;
     private Integer stock;
-    @OneToMany(mappedBy = "product", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private List<Comment> comments;
-    @OneToMany(mappedBy = "product", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private List<Image> images;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Comment> comments ;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<Image> images ;
     @ManyToMany(mappedBy = "products")
-    private List<Order> orders;
-
+    private List<Order> orders ;
 
     public Product() {
+        this.comments = new ArrayList<>();
+        this.images = new ArrayList<>();
+        this.orders = new ArrayList<>();
     }
 
     public Product(String brand, String reference, LocalDate purchaseDate, Double price, Integer stock) {
+        this();
         this.brand = brand;
         this.reference = reference;
         this.purchaseDate = purchaseDate;
         this.price = price;
         this.stock = stock;
+
     }
 
     public void setId(Long id) {

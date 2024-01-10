@@ -1,7 +1,10 @@
 package service;
 
+import impl.OrderDao;
 import impl.ProductDao;
+import model.Comment;
 import model.Image;
+import model.Order;
 import model.Product;
 
 import java.time.LocalDate;
@@ -10,9 +13,11 @@ import java.util.List;
 public class ProductService {
 
     private static ProductDao productDao;
+    private static OrderDao orderDao;
 
     public ProductService(){
         productDao = new ProductDao();
+        orderDao = new OrderDao();
     }
 
     public boolean addProduct(String brand, String reference, LocalDate purchaseDate, Double price, Integer stock){
@@ -93,6 +98,22 @@ public class ProductService {
         Image image = new Image();
         image.setUrl(url);
 
+        // image.setProduct(product);
+
         return productDao.addImageToProduct(image, product);
+    }
+
+    public boolean addCommentToProduct(Product product, String content, int mark, LocalDate date){
+
+        Comment comment = new Comment();
+        comment.setMark(mark);
+        comment.setDate(date);
+        comment.setContent(content);
+
+        return productDao.addCommentToProduct(product, comment);
+    }
+
+    public boolean createOrder(Order order){
+        return orderDao.create(order);
     }
 }

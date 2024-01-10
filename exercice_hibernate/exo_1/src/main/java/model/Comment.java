@@ -8,13 +8,16 @@ import java.time.LocalDate;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
     private String content;
     private LocalDate date;
     private int mark;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Product product;
+
+    public Comment(){
+
+    }
 
     public Long getId() {
         return id;
@@ -46,6 +49,14 @@ public class Comment {
 
     public void setMark(int mark) {
         this.mark = mark;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     @Override

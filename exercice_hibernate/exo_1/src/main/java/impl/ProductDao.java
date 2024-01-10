@@ -1,6 +1,7 @@
 package impl;
 
 import dao.BaseDAO;
+import model.Comment;
 import model.Image;
 import model.Product;
 import org.hibernate.Session;
@@ -334,7 +335,7 @@ public class ProductDao  implements BaseDAO<Product> {
             transaction.begin();
 
             product.getImages().add(image);
-            session.merge(product);
+            session.update(product);
             session.getTransaction().commit();
 
             return true;
@@ -346,7 +347,32 @@ public class ProductDao  implements BaseDAO<Product> {
         } finally {
             session.close();
         }
+        return false;
+    }
 
+    public boolean addCommentToProduct(Product product, Comment comment){
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+
+        try {
+            transaction = session.getTransaction();
+            transaction.begin();
+
+            product.getComments().add(comment);
+
+            session.update(product);
+            session.getTransaction().commit();
+
+            return true;
+
+        } catch (Exception e){
+            if (transaction != null){
+                transaction.rollback();
+                e.printStackTrace();
+            }
+        } finally {
+            session.close();
+        }
         return false;
     }
 

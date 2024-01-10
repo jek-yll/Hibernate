@@ -1,6 +1,8 @@
 package ihm;
 
 import impl.ProductDao;
+import model.Comment;
+import model.Order;
 import model.Product;
 import service.ProductService;
 
@@ -31,6 +33,8 @@ public class Ihm {
             System.out.println("11. Supprimer les produits d'une marque");
             System.out.println("12. Calcul du prix moyen des produits");
             System.out.println("13. Ajouter une image");
+            System.out.println("14. Ajouter un commentaire");
+            System.out.println("15. Création d'une commande");
             System.out.println("0. Quitter");
 
             System.out.print("Choix : ");
@@ -77,6 +81,12 @@ public class Ihm {
                     break;
                 case 13:
                     addImage();
+                    break;
+                case 14:
+                    addComment();
+                    break;
+                case 15:
+                    createOrder();
                     break;
                 case 0:
                     running = false;
@@ -308,4 +318,59 @@ public class Ihm {
         }
     }
 
+    private static void addComment(){
+        System.out.println("#### AJOUTER UN COMMENTAIRE ####");
+        System.out.println("Saisir l'identifiant du produit à commenter : ");
+        Long id = sc.nextLong();
+        sc.nextLine();
+
+        Product product = productService.findProductById(id);
+
+        if (product != null){
+            System.out.println("Saisir le contenu de votre commentaire pour le produit " + product.getReference() + " : ");
+            String content = sc.nextLine();
+            System.out.println("Saisir une note pour le produit (/5): ");
+            int mark = sc.nextInt();
+            sc.nextLine();
+
+            LocalDate date = LocalDate.now();
+
+
+            productService.addCommentToProduct(product, content, mark, date);
+        } else {
+            System.out.println("Le produit n'existe pas");
+        }
+    }
+
+    private static void createOrder() {
+        System.out.println("#### CREATION D'UNE COMMANDE ####");
+        System.out.println("Voici la liste des produits disponible : ");
+        getAllProduct();
+
+
+        String end;
+        Order order;
+        do {
+            System.out.println("Saisir l'id d'un produit : ");
+            Long id = sc.nextLong();
+            sc.nextLine();
+            System.out.println("Saisir une quantité pour ce produit : ");
+            int quantity = sc.nextInt();
+            sc.nextLine();
+
+            Product product = productService.findProductById(id);
+            order = new Order();
+
+            for (int i = 0; i < quantity; i++) {
+                order.getProducts().add(product);
+            }
+
+            System.out.println("Taper 0 pour terminer la commande");
+            end = sc.nextLine();
+
+        } while (end != "0");
+
+        productService.createOrder(order);
+
+    }
 }
